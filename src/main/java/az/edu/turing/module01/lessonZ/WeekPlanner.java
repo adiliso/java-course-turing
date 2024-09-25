@@ -38,14 +38,18 @@ public class WeekPlanner {
                 continue;
 
             }
-            for (String[] strings : schedule) {
-                if (strings[0].equalsIgnoreCase(command)) {
-                    System.out.printf("Your tasks for %s: %s\n", strings[0], strings[1]);
-                    continue outerLoop;
-                }
-            }
-            System.out.println("Sorry, I don't understand you, please try again.");
+            printTaskOfDay(command);
         }
+    }
+
+    private void printTaskOfDay(String day) {
+        for (String[] strings : schedule) {
+            if (strings[0].equalsIgnoreCase(day)) {
+                System.out.printf("Your tasks for %s: %s\n", strings[0], strings[1]);
+                return;
+            }
+        }
+        System.out.println("Sorry, I don't understand you, please try again.");
     }
 
     private void changeTasks(String day) {
