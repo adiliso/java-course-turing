@@ -6,15 +6,15 @@ import java.util.Scanner;
 public class ShootingAtTheSquare {
     char[][] matrix;
     boolean gameWon;
-    int n;
-    int m;
+    int targetRow;
+    int targetColumn;
     Random random = new Random();
 
     public ShootingAtTheSquare() {
         matrix = new char[5][5];
         gameWon = false;
-        n = random.nextInt(5);
-        m = random.nextInt(5);
+        targetRow = random.nextInt(5);
+        targetColumn = random.nextInt(5);
         initializeBoard();
     }
 
@@ -36,7 +36,7 @@ public class ShootingAtTheSquare {
 
     public void startAdvancedGame() {
         boolean isHorizontal = random.nextBoolean();
-        n = random.nextInt(3);
+        targetRow = random.nextInt(3);
         System.out.println("All set. Get ready to rumble!");
         while (!gameWon) {
             int row = guess("row") - 1;
@@ -53,7 +53,7 @@ public class ShootingAtTheSquare {
     }
 
     private boolean checkPotentialWin(int row, int column) {
-        if (row == n && column == m) {
+        if (row == targetRow && column == targetColumn) {
             matrix[row][column] = 'x';
             return true;
         } else {
@@ -65,19 +65,19 @@ public class ShootingAtTheSquare {
 
     private boolean checkPotentialWin(int row, int column, boolean isHorizontal) {
         if (isHorizontal) {
-            if ((row >= n && row <= n + 2) && column == m) {
-                matrix[m][n] = 'x';
-                matrix[m][n + 1] = 'x';
-                matrix[m][n + 2] = 'x';
+            if ((row >= targetRow && row <= targetRow + 2) && column == targetColumn) {
+                matrix[targetColumn][targetRow] = 'x';
+                matrix[targetColumn][targetRow + 1] = 'x';
+                matrix[targetColumn][targetRow + 2] = 'x';
                 return true;
             } else {
                 matrix[row][column] = '*';
             }
         } else {
-            if (row == m && (column >= n && column <= n + 2)) {
-                matrix[n][m] = 'x';
-                matrix[n + 1][m] = 'x';
-                matrix[n + 2][m] = 'x';
+            if (row == targetColumn && (column >= targetRow && column <= targetRow + 2)) {
+                matrix[targetRow][targetColumn] = 'x';
+                matrix[targetRow + 1][targetColumn] = 'x';
+                matrix[targetRow + 2][targetColumn] = 'x';
                 return true;
             } else {
                 matrix[row][column] = '*';
