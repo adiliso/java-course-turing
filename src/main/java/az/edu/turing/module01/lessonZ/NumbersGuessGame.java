@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Numbers {
+public class NumbersGuessGame {
     private final int[] guessedNumbers = new int[101];
-    private int k = 0;
+    private int count = 0;
 
     public void start() {
         Scanner sc = new Scanner(System.in);
@@ -16,11 +16,12 @@ public class Numbers {
         String name = sc.nextLine();
         System.out.println("Let the game begin!");
         while (true) {
-            if (k == 100) {
+            if (count == 100) {
                 System.out.println("You guessed a lot!!!");
                 return;
             }
             int guess = guessNumber();
+            guessedNumbers[count++] = guess;
             if (guess == target) {
                 System.out.println("Congratulations, " + name);
                 break;
@@ -30,13 +31,13 @@ public class Numbers {
                 System.out.println("Your number is too big. Please, try again.");
             }
         }
-        sortAndPrintArray();
+        Arrays.sort(guessedNumbers, 0, count);
+        printArray();
     }
 
-    private void sortAndPrintArray() {
-        Arrays.sort(guessedNumbers, 0, k);
+    private void printArray() {
         System.out.print("Your numbers: ");
-        for (int i = k - 1; i >= 0; i--) {
+        for (int i = count - 1; i >= 0; i--) {
             System.out.print(guessedNumbers[i] + " ");
         }
     }
@@ -54,7 +55,6 @@ public class Numbers {
                 sc.nextLine();
             }
         }
-        guessedNumbers[k++] = guess;
         return guess;
     }
 

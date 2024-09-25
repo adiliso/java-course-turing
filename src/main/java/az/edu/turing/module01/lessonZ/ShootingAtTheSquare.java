@@ -4,71 +4,89 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class ShootingAtTheSquare {
-    char[][] matrix = new char[5][5];
+    char[][] matrix;
+    boolean gameWon;
+    int n;
+    int m;
     Random random = new Random();
-    int n = random.nextInt(5);
-    int m = random.nextInt(5);
 
-    public void startDefaultGame() {
-        generateDefaultValue(); // assign all matrix to '-'
+    public ShootingAtTheSquare() {
+        matrix = new char[5][5];
+        gameWon = false;
+        n = random.nextInt(5);
+        m = random.nextInt(5);
+        initializeBoard();
+    }
+
+    public void startDefaultGame() { // assign all matrix to '-'
         System.out.println("All set. Get ready to rumble!");
-        while (true) {
-            int a, b;
-            a = guess("row");
-            b = guess("column");
-            if (a == n && b == m) {
+        while (!gameWon) {
+            int row = guess("row") - 1;
+            int column = guess("column") - 1;
+            gameWon = checkPotentialWin(row, column);
+            if (gameWon) {
                 System.out.println("You have won!");
-                matrix[a][b] = 'x';
                 printMatrix();
-                break;
             } else {
                 System.out.println("Try again");
-                matrix[a][b] = '*';
                 printMatrix();
             }
         }
     }
 
     public void startAdvancedGame() {
-        generateDefaultValue();
         boolean isHorizontal = random.nextBoolean();
         n = random.nextInt(3);
         System.out.println("All set. Get ready to rumble!");
-        while (true) {
-            int a, b;
-            a = guess("row");
-            b = guess("column");
-            if (isHorizontal) {
-                if ((a >= n && a <= n + 2) && b == m) {
-                    matrix[m][n] = 'x';
-                    matrix[m][n + 1] = 'x';
-                    matrix[m][n + 2] = 'x';
-                    System.out.println("You have won!");
-                    printMatrix();
-                    break;
-                } else {
-                    System.out.println("Try again");
-                    matrix[a][b] = '*';
-                    printMatrix();
-                }
+        while (!gameWon) {
+            int row = guess("row") - 1;
+            int column = guess("column") - 1;
+            gameWon = checkPotentialWin(row, column, isHorizontal);
+            if (gameWon) {
+                System.out.println("You have won!");
+                printMatrix();
             } else {
-                if (a == m && (b >= n && b <= n + 2)) {
-                    matrix[n][m] = 'x';
-                    matrix[n + 1][m] = 'x';
-                    matrix[n + 2][m] = 'x';
-                    System.out.println("You have won!");
-                    printMatrix();
-                    break;
-                } else {
-                    System.out.println("Try again");
-                    matrix[a][b] = '*';
-                    printMatrix();
-                }
+                System.out.println("Try again");
+                printMatrix();
             }
         }
     }
 
-    private void generateDefaultValue() {
+    private boolean checkPotentialWin(int row, int column) {
+        if (row == n && column == m) {
+            matrix[row][column] = 'x';
+            return true;
+        } else {
+            matrix[row][column] = '*';
+        }
+        return false;
+    }
+
+
+    private boolean checkPotentialWin(int row, int column, boolean isHorizontal) {
+        if (isHorizontal) {
+            if ((row >= n && row <= n + 2) && column == m) {
+                matrix[m][n] = 'x';
+                matrix[m][n + 1] = 'x';
+                matrix[m][n + 2] = 'x';
+                return true;
+            } else {
+                matrix[row][column] = '*';
+            }
+        } else {
+            if (row == m && (column >= n && column <= n + 2)) {
+                matrix[n][m] = 'x';
+                matrix[n + 1][m] = 'x';
+                matrix[n + 2][m] = 'x';
+                return true;
+            } else {
+                matrix[row][column] = '*';
+            }
+        }
+        return false;
+    }
+
+    private void initializeBoard() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 matrix[i][j] = '-';
@@ -77,17 +95,25 @@ public class ShootingAtTheSquare {
     }
 
     private boolean notValid(int n) {
-        return n < 0 || n > 4;
+        return n < 1 || n > 5;
     }
 
     private int guess(String type) {
         Scanner sc = new Scanner(System.in);
         int a;
-        do {
+        while (true) {
             System.out.printf("Enter the shooting %s (1-5): ", type);
-            a = sc.nextInt() - 1;
-        } while (notValid(a));
-        return a;
+            if (sc.hasNextInt()) {
+                a = sc.nextInt();
+            } else {
+                System.out.println("Please enter an integer!");
+                sc.nextLine();
+                continue;
+            }
+            if (notValid(a)) {
+                System.out.println("Please enter an integer between 1 and 5!");
+            } else return a;
+        }
     }
 
     private void printMatrix() {
