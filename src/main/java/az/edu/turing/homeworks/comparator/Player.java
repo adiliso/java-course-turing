@@ -5,12 +5,12 @@ public class Player implements Comparable<Player> {
     private String name;
     private int age;
     private boolean isFemale;
-    private int score;
+    private double score;
 
     public Player() {
     }
 
-    public Player(int id, String name, int age, boolean isFemale, int score) {
+    public Player(int id, String name, int age, boolean isFemale, double score) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -20,7 +20,7 @@ public class Player implements Comparable<Player> {
 
     @Override
     public int compareTo(Player o) {
-        return this.id - o.id;
+        return this.id - o.id   ;
     }
 
     public int getAge() {
@@ -55,11 +55,11 @@ public class Player implements Comparable<Player> {
         this.name = name;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
