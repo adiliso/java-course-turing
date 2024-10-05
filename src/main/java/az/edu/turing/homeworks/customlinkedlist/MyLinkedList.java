@@ -8,29 +8,29 @@ public class MyLinkedList<T> {
     private ListNode<T> tail;
     private int size;
 
-    public MyLinkedList() {
-        head = new ListNode<>();
-        tail = head;
-        size = 0;
-    }
-
     public void addFirst(T data) {
-        head.val = data;
-        head = new ListNode<>(null, head);
+        if (head == null) {
+            tail = head = new ListNode<>(data);
+        } else {
+            head = new ListNode<>(data, head);
+        }
         size++;
     }
 
     public void add(T data) {
-        tail.next = new ListNode<>(data);
-        tail = tail.next;
+        if (head == null) {
+            tail = head = new ListNode<>(data);
+        } else {
+            tail.next = new ListNode<>(data);
+            tail = tail.next;
+        }
         size++;
     }
 
     public T removeFirst() {
         if (size == 0) throw new IndexOutOfBoundsException();
-        head = head.next;
         T removed = head.val;
-        head.val = null;
+        head = head.next;
         size--;
         return removed;
     }
@@ -38,20 +38,31 @@ public class MyLinkedList<T> {
     public T removeLast() {
         if (size == 0) throw new NoSuchElementException();
         T removed = tail.val;
+        if (size == 1) {
+            removeFirst();
+            return removed;
+        }
         ListNode<T> curr = head;
         while (curr.next != tail) {
             curr = curr.next;
         }
-        tail = curr;
-        tail.next = null;
+        tail = curr.next = null;
         size--;
         return removed;
     }
 
     public void insert(int index, T data) {
         if (index < 0 || index > size) throw new IndexOutOfBoundsException();
+        if (index == 0) {
+            this.addFirst(data);
+            return;
+        }
+        if (index == size - 1) {
+            this.add(data);
+            return;
+        }
         ListNode<T> curr = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < index - 1; i++) {
             curr = curr.next;
         }
         curr.next = new ListNode<>(data, curr.next);
@@ -101,15 +112,15 @@ public class MyLinkedList<T> {
     }
 
     public void removeAll() {
-        head = new ListNode<>();
-        tail = head;
+        head = null;
+        tail = null;
         size = 0;
     }
 
     public Object[] toArray() {
         Object[] array = new Object[size];
         int count = 0;
-        ListNode<T> curr = head.next;
+        ListNode<T> curr = head;
         while (curr != null) {
             array[count++] = curr.val;
             curr = curr.next;
