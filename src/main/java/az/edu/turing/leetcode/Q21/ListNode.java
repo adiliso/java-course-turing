@@ -1,6 +1,6 @@
 package az.edu.turing.leetcode.Q21;
 
-public class ListNode {
+class ListNode {
     int val;
     ListNode next;
 
